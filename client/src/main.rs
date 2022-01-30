@@ -2,7 +2,11 @@ use clap::Parser;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
-#[clap(author, version, about, long_about = None)]
+#[clap(
+    author = "John Doe",
+    version = "1.0.0",
+    about = "A simple program to greet a person"
+)]
 struct Args {
     /// Name of the person to greet
     #[clap(short, long)]
