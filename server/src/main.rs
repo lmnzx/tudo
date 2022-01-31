@@ -8,7 +8,7 @@ use poem::{
 };
 use std::env;
 
-use server::routes::{create_todo, ping};
+use server::routes::{create_todo, get_todos, ping};
 
 /*
     TODO - CRUD operations on todo
@@ -39,6 +39,7 @@ async fn main() -> Result<(), std::io::Error> {
     let app = Route::new()
         .at("/ping", get(ping))
         .at("/create_todo", post(create_todo))
+        .at("/get_todos", get(get_todos))
         .with(AddData::new(todo_collection))
         .with(Tracing::default());
 
