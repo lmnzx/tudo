@@ -39,7 +39,7 @@ async fn main() -> Result<(), std::io::Error> {
     let app = Route::new()
         .at("/ping", get(ping))
         .at("/create_todo", post(create_todo))
-        .at("/get_todos", get(get_todos))
+        .at("/get_todos/*", get(get_todos))
         .with(AddData::new(todo_collection))
         .with(Tracing::default());
 

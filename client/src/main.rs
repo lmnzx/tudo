@@ -1,26 +1,29 @@
-use clap::Parser;
+use clap::App;
 
-/// Simple program to greet a person
-#[derive(Parser, Debug)]
-#[clap(
-    author = "John Doe",
-    version = "1.0.0",
-    about = "A simple program to greet a person"
-)]
-struct Args {
-    /// Name of the person to greet
-    #[clap(short, long)]
-    name: String,
-
-    /// Number of times to greet
-    #[clap(short, long, default_value_t = 1)]
-    count: u8,
+fn ping() -> String {
+    match ureq::get("http://localhost:3000/ping").call() {
+        Ok(res) => {
+            println!("{}", res.into_string().unwrap());
+            "Pong".to_string()
+        }
+        Err(err) => {
+            format!("Error - {}", err)
+        }
+    }
 }
 
 fn main() {
-    let args = Args::parse();
+    let matches = App::new("rusty-todo")
+        .version("0.1.0")
+        .author("Sayan Mallick <snyxmk@gmail.com>")
+        .about("Rusty Todo CLI")
+        .subcommand(App::new("ping").about("sends a ping to the server"))
+        .get_matches();
 
-    for _ in 0..args.count {
-        println!("Hello {}!", args.name)
+    match matches.subcommand() {
+        Some(("ping", _)) => {
+            println!("{}", ping());
+        }
+        _ => println!("Yet to implement"),
     }
 }

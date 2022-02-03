@@ -8,3 +8,4 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "3.0.13", features = ["derive"] }
+ureq = { version = "2.4.0", features = ["json"] }
