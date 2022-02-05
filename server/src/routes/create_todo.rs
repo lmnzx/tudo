@@ -7,8 +7,13 @@ use poem::{
     web::{Data, Json},
     IntoResponse,
 };
+use serde::Deserialize;
 
-use crate::todo::Todo;
+#[derive(Deserialize, Debug)]
+pub struct Todo {
+    pub title: String,
+    pub completed: bool,
+}
 
 #[handler]
 pub async fn create_todo(
@@ -17,7 +22,7 @@ pub async fn create_todo(
 ) -> impl IntoResponse {
     println!("{:?}", todo);
 
-    let result = collection
+    match collection
         .insert_one(
             doc! {
                 "title": todo.title,
@@ -26,9 +31,8 @@ pub async fn create_todo(
             None,
         )
         .await
-        .unwrap();
-
-    println!("{:?}", result);
-
-    "Created a new todo".into_response();
+    {
+        Ok(_) => "Todo created".into_response(),
+        Err(e) => format!("Error: {}", e).into_response(),
+    }
 }
